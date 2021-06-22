@@ -24,10 +24,28 @@
  * @see https://github.com/justinhunt/moodle-mod_collaborate
  */
 
+namespace mod_collaborate\event;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_collaborate';
-$plugin->version = 2019072106;
-$plugin->release = 'v1.0'; // Basic activity plugin template.
-$plugin->requires = 2017111301; // Moodle 3.4, 3.5, 3.6, 3.7
-$plugin->maturity = MATURITY_BETA;
+class page_viewed extends \core\event\base {
+    protected function init() {
+        $this->data['crud'] = 'r';
+        $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
+    }
+
+    public static function get_name() {
+        return get_string('pageviewed', 'mod_collaborate');
+    }
+    /**
+     * Returns non-localised event description with id's for admin use only.
+     *
+     * @return string
+     */
+    public function get_description() {
+        return "The user with id '$this->userid' has
+                viewed a page with the id '$this->objectid'
+                in the Collaborate activity with course
+                module id '$this->contextinstanceid'.";
+    }
+
+}

@@ -45,3 +45,11 @@ $string['pluginname'] = 'collaborate';
 
 // Mod form specific collaborate settings.
 $string['title'] = 'Activity Title: ';
+$string['texteditor'] = 'Instructions {$a}';
+$string['pageviewed'] = 'Page viewed: ';
+
+// User button labels.
+$string['studenta'] = 'Partner A';
+$string['studentb'] = 'Partner B';
+
+$string['returnview'] = 'Back';

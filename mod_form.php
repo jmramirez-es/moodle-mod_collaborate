@@ -26,6 +26,9 @@
  * @see https://github.com/moodlehq/moodle-mod_collaborate
  * @see https://github.com/justinhunt/moodle-mod_collaborate */
 
+ // para poder acceder a la clase collaborate_editor.php
+ use \mod_collaborate\local\collaborate_editor;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
@@ -75,6 +78,12 @@ class mod_collaborate_mod_form extends moodleform_mod {
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();
+
+        // Add two editors for partner instructions.
+        $names = collaborate_editor::get_editor_names();
+        foreach($names as $name) {
+            collaborate_editor::add_editor($mform, $this->context, $name);
+        }
 
         // Add standard elements, common to all modules.
         $this->standard_coursemodule_elements();
