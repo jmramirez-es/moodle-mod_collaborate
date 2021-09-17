@@ -52,4 +52,4 @@ $string['pageviewed'] = 'Page viewed: ';
 $string['studenta'] = 'Partner A';
 $string['studentb'] = 'Partner B';
 
-$string['returnview'] = 'Back';
+$string['returnview'] = 'Back to main page';

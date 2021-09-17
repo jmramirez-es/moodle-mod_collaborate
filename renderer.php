@@ -62,11 +62,12 @@ class mod_collaborate_renderer extends plugin_renderer_base {
     }
 
      /**
-     * Displays the showpage view page content.
+     * Displays the submissions page (showpage.php).
      *
-     * @param $collaborate the collaborate instance std Object
-     * @param $cm the course module std Object
-     * @param $page the page to show
+     * @param object $collaborate the collaborate instance std Object
+     * @param object $cm the course module std Object
+     * @param string $page which partner's page to display
+     * @param object $form the submission forms object
      * @return none
      */
     public function render_page_content($collaborate, $cm, $page) {
@@ -77,6 +78,8 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         $data->user = 'User: '. strtoupper($page);
 
+        debugging::logit('Module insatce: ', $collaborate);
+        
         // Get the content from the database.
         $content = ($page == 'a') ? $collaborate->instructionsa : $collaborate->instructionsb;
         $data->body = $content;
