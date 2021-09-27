@@ -119,3 +119,55 @@ My instance: stdClass Object
     [modname] => collaborate
 )
 
+Module insatce: stdClass Object
+(
+    [id] => 2
+    [course] => 3
+    [name] => Colaboradores 
+    [intro] => <p dir="ltr" style="text-align: left;">Esta es la descripción<br></p>
+    [introformat] => 1
+    [title] => Actividad Titulo
+    [timecreated] => 1631866586
+    [timemodified] => 0
+    [grade] => 100
+)
+
+Module insatce: stdClass Object
+(
+    [id] => 2
+    [course] => 3
+    [name] => Colaboradores 
+    [intro] => <p dir="ltr" style="text-align: left;">Esta es la descripción<br></p>
+    [introformat] => 1
+    [title] => Actividad Titulo
+    [timecreated] => 1631866586
+    [timemodified] => 0
+    [grade] => 100
+)
+
+Module insatce: stdClass Object
+(
+    [id] => 2
+    [course] => 3
+    [name] => Colaboradores 
+    [intro] => <p dir="ltr" style="text-align: left;">Esta es la descripción<br></p>
+    [introformat] => 1
+    [title] => Actividad Titulo
+    [timecreated] => 1631866586
+    [timemodified] => 0
+    [grade] => 100
+)
+
+Module insatce: stdClass Object
+(
+    [id] => 1
+    [course] => 3
+    [name] => Demo Collaborate
+    [intro] => 
+    [introformat] => 1
+    [title] => Actividad 1
+    [timecreated] => 1622739143
+    [timemodified] => 1624272288
+    [grade] => 100
+)
+

@@ -40,7 +40,8 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
  * @copyright  2019 Richard Jones richardnz@outlook.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_collaborate_mod_form extends moodleform_mod {
+class mod_collaborate_mod_form extends moodleform_mod 
+{
 
     /**
      * Defines forms elements
@@ -90,5 +91,30 @@ class mod_collaborate_mod_form extends moodleform_mod {
 
         // Add standard buttons, common to all modules.
         $this->add_action_buttons();
+    }
+
+    
+
+    // Standard Moodle function for editor area preprocessing.
+    function data_preprocessing(&$default_values) {
+
+        if ($this->current->instance) {
+
+            $context = $this->context;
+            $options = collaborate_editor::get_editor_options($context);
+            $names = collaborate_editor::get_editor_names();
+
+            foreach ($names as $name) {
+                $default_values = (object) $default_values;
+                $default_values = file_prepare_standard_editor(
+                    $default_values,
+                    $name,
+                    $options,
+                    $context,
+                    'mod_collaborate',
+                    $name,
+                    $default_values->id);
+            }
+        }
     }
 }

@@ -40,5 +40,44 @@ defined('MOODLE_INTERNAL') || die();
  */
 function xmldb_collaborate_upgrade($oldversion) {
 
+    global $DB;
+    $dbman = $DB->get_manager();
+
+    if ($oldversion < 2019072112) {
+
+        // Define table collaborate to be created.
+        $table = new xmldb_table('collaborate');
+
+        // Adding fields to table collaborate.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('course', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('name', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('intro', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+        $table->add_field('introformat', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('title', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('instructionsa', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('instructionsaformat', XMLDB_TYPE_INTEGER, '4', null, null, null, '0');
+        $table->add_field('instructionsb', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('instructionsbformat', XMLDB_TYPE_INTEGER, '4', null, null, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('grade', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '100');
+
+        // Adding keys to table collaborate.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Adding indexes to table collaborate.
+        $table->add_index('course', XMLDB_INDEX_NOTUNIQUE, ['course']);
+
+        // Conditionally launch create table for collaborate.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2019072112, 'collaborate');
+    }
+
+
     return true;
 }

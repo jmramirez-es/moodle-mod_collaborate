@@ -29,7 +29,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see https://github.com/moodlehq/moodle-mod_collaborate
  * @see https://github.com/justinhunt/moodle-mod_collaborate */
-
+use mod_collaborate\local\collaborate_editor;
 defined('MOODLE_INTERNAL') || die();
 
 /* Moodle core API */
@@ -405,7 +405,8 @@ function collaborate_update_grades(stdClass $collaborate, $userid = 0) {
  * @return array of [(string)filearea] => (string)description
  */
 function collaborate_get_file_areas($course, $cm, $context) {
-    return array();
+    return ['instructionsa' => 'Instructions for partner A',
+    'instructionsb' => 'Instructions for partner B'];
 }
 
 /**
@@ -452,7 +453,14 @@ function collaborate_pluginfile($course, $cm, $context, $filearea, array $args, 
 
     require_login($course, true, $cm);
 
-    send_file_not_found();
+    $fs = get_file_storage();
+    $relativepath = implode('/', $args);
+    $fullpath = "/$context->id/mod_collaborate/$filearea/$relativepath";
+    if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
+        return false;
+    }
+    // Finally send the file.
+    send_stored_file($file, 0, 0, $forcedownload, $options);
 }
 
 /* Navigation API */

@@ -29,7 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Renderer for collaborate mod.
  */
-class mod_collaborate_renderer extends plugin_renderer_base {
+class mod_collaborate_renderer extends plugin_renderer_base 
+{
 
     /**
      * Displays the main view page content.
@@ -44,16 +45,13 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         $data->heading = $collaborate->title;
         // Moodle handles processing of std intro field.
-        $data->body = format_module_intro('collaborate',
-                $collaborate, $cm->id);
+        $data->body = format_module_intro('collaborate', $collaborate, $cm->id);
 
         // Set up the user page URLs.
         $a = new \moodle_url('/mod/collaborate/showpage.php', ['cid' => $collaborate->id, 'page' => 'a']);
         $b = new \moodle_url('/mod/collaborate/showpage.php', ['cid' => $collaborate->id, 'page' => 'b']);
         $data->url_a = $a->out(false);
         $data->url_b = $b->out(false);
-
-
 
         // Display the view page content.
         echo $this->output->header();
@@ -72,25 +70,34 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      */
     public function render_page_content($collaborate, $cm, $page) {
 
-        $data = new stdClass();
+       $data = new stdClass();
 
-        $data->heading = $collaborate->title;
+       $data->heading = $collaborate->title;
+       $data->user = 'User: '. strtoupper($page);
 
-        $data->user = 'User: '. strtoupper($page);
+       // Moodle handles processing of std intro field.
+       $content = ($page == 'a') ? $collaborate->instructionsa : $collaborate->instructionsb;
+       $filearea = 'instructions' . $page;
 
-        debugging::logit('Module insatce: ', $collaborate);
-        
-        // Get the content from the database.
-        $content = ($page == 'a') ? $collaborate->instructionsa : $collaborate->instructionsb;
-        $data->body = $content;
+       $context = context_module::instance($cm->id);
+       $content = file_rewrite_pluginfile_urls($content, 'pluginfile.php', $context->id,
+               'mod_collaborate', $filearea, $collaborate->id);
 
-        // Get a return url back to view page.
-        $urlv = new \moodle_url('/mod/collaborate/view.php', ['id' => $cm->id]);
-        $data->url_view = $urlv->out(false);
+       // Run the content through format_text to enable streaming video etc.
+       $formatoptions = new stdClass;
+       $formatoptions->noclean = true;
+       $formatoptions->overflowdiv = true;
+       $formatoptions->context = $context;
+       $format = ($page == 'a') ? $collaborate->instructionsaformat : $collaborate->instructionsbformat;
+       
+        $data->body = format_text($content, $format, $formatoptions);
 
-        // Display the show page content.
-        echo $this->output->header();
-        echo $this->render_from_template('mod_collaborate/show', $data);
-        echo $this->output->footer();
-    }
+       $urlv = new \moodle_url('/mod/collaborate/view.php', ['id' => $cm->id]);
+       $data->url_view = $urlv->out(false);
+
+       // Display the view page content.
+       echo $this->output->header();
+       echo $this->render_from_template('mod_collaborate/show', $data);
+       echo $this->output->footer();
+   }
 }
