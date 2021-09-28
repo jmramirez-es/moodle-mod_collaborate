@@ -53,6 +53,9 @@ $PAGE->set_url('/mod/collaborate/view.php', array('id' => $cm->id));
 
 require_login($course, true, $cm);
 
+// Add the module context for the reports tab permission.
+$context = context_module::instance($cm->id);
+
 $PAGE->set_title(format_string($collaborate->name));
 $PAGE->set_heading(format_string($course->fullname));
 
@@ -71,5 +74,15 @@ $renderer = $PAGE->get_renderer('mod_collaborate');
 if (!$collaborate->intro) {
     $collaborate->intro = '';
 }
-// Call the renderer method to display the collaborate intro content.
-$renderer->render_view_page_content($collaborate, $cm);
+
+// Show reports tab if permission exists and admin has allowed.
+$reportstab = false;
+$config = get_config('mod_collaborate');
+if ($config->enablereports) {
+    if (has_capability('mod/collaborate:viewreportstab', $context)) {
+        $reportstab = true;
+    }
+}
+
+// New parameter to determine status of tabs.
+$renderer->render_view_page_content($collaborate, $cm, $reportstab);

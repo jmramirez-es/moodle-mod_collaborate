@@ -39,7 +39,7 @@ class mod_collaborate_renderer extends plugin_renderer_base
      * @param $cm the course module std Object
      * @return none
      */
-    public function render_view_page_content($collaborate, $cm) {
+    public function render_view_page_content($collaborate, $cm, $reportstab = false) {
 
         $data = new stdClass();
 
@@ -47,12 +47,24 @@ class mod_collaborate_renderer extends plugin_renderer_base
         // Moodle handles processing of std intro field.
         $data->body = format_module_intro('collaborate', $collaborate, $cm->id);
 
+        // Show reports tab?
+        $data->reportstab = $reportstab;
+
         // Set up the user page URLs.
         $a = new \moodle_url('/mod/collaborate/showpage.php', ['cid' => $collaborate->id, 'page' => 'a']);
         $b = new \moodle_url('/mod/collaborate/showpage.php', ['cid' => $collaborate->id, 'page' => 'b']);
         $data->url_a = $a->out(false);
         $data->url_b = $b->out(false);
 
+        // Add links to reports tabs, if enabled.
+        if ($reportstab) {
+            $r = new \moodle_url('/mod/collaborate/reports.php',
+                    ['cid' => $collaborate->id]);
+            $v = new \moodle_url('/mod/collaborate/view.php', ['id' => $cm->id]);
+            $data->url_reports = $r->out(false);
+            $data->url_view = $v->out(false);
+        }
+        
         // Display the view page content.
         echo $this->output->header();
         echo $this->render_from_template('mod_collaborate/view', $data);
@@ -68,7 +80,7 @@ class mod_collaborate_renderer extends plugin_renderer_base
      * @param object $form the submission forms object
      * @return none
      */
-    public function render_page_content($collaborate, $cm, $page) {
+    public function render_page_content($collaborate, $cm, $page, $form) {
 
        $data = new stdClass();
 
@@ -91,6 +103,9 @@ class mod_collaborate_renderer extends plugin_renderer_base
        $format = ($page == 'a') ? $collaborate->instructionsaformat : $collaborate->instructionsbformat;
        
         $data->body = format_text($content, $format, $formatoptions);
+
+        // Get the form html.
+        $data->form = $form->render();
 
        $urlv = new \moodle_url('/mod/collaborate/view.php', ['id' => $cm->id]);
        $data->url_view = $urlv->out(false);

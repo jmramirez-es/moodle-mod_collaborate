@@ -53,3 +53,18 @@ $string['studenta'] = 'Partner A';
 $string['studentb'] = 'Partner B';
 
 $string['returnview'] = 'Back to main page';
+
+
+$string['enablereports'] = 'Enable reports:';
+$string['enablereports_desc'] = 'Allow teachers to see the reports tab.';
+
+$string['collaborate:viewreportstab'] = 'View reports';
+
+//tab strings
+$string['viewtab'] = 'View';
+$string['reportstab'] = 'Reports';
+
+// Submissions form.
+$string['submission'] = 'Your submission';
+$string['submissionsave'] = 'Save submission';
+$string['submissionupdated'] = 'Update submission';

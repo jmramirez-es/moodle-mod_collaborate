@@ -43,40 +43,47 @@ function xmldb_collaborate_upgrade($oldversion) {
     global $DB;
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2019072112) {
+    if ($oldversion < 2019072118) {
 
-        // Define table collaborate to be created.
-        $table = new xmldb_table('collaborate');
+       // Define new table to be created.
+       $table = new xmldb_table('collaborate_submissions');
 
-        // Adding fields to table collaborate.
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('course', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('name', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('intro', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
-        $table->add_field('introformat', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, '0');
-        $table->add_field('title', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('instructionsa', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('instructionsaformat', XMLDB_TYPE_INTEGER, '4', null, null, null, '0');
-        $table->add_field('instructionsb', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('instructionsbformat', XMLDB_TYPE_INTEGER, '4', null, null, null, '0');
-        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $table->add_field('grade', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '100');
+       // Define fields to be added to collaborate_submissions.
+       $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null, null);
+       $table->add_field('collaborateid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'id');
+       $table->add_field('page', XMLDB_TYPE_CHAR, '1', null, XMLDB_NOTNULL, null, null, 'collaborateid');
+       $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'page');
+       $table->add_field('submission', XMLDB_TYPE_TEXT, null, null, null, null, null, 'userid');
+       $table->add_field('submissionformat', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'submission');
+       $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'submissionformat');
+       $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'timecreated');
 
-        // Adding keys to table collaborate.
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+       // Adding keys.
+       $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
 
-        // Adding indexes to table collaborate.
-        $table->add_index('course', XMLDB_INDEX_NOTUNIQUE, ['course']);
+       if (!$dbman->table_exists($table)) {
+           $dbman->create_table($table);
+       }
 
-        // Conditionally launch create table for collaborate.
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
+       upgrade_mod_savepoint(true, 2019072118, 'collaborate');
+    }
+
+    if ($oldversion < 2019072300) {
+
+        // Define field grade to be added to collaborate_submissions.
+        $table = new xmldb_table('collaborate_submissions');
+        $field = new xmldb_field('grade', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'timemodified');
+
+        // Conditionally launch add field grade.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
         }
 
         // Collaborate savepoint reached.
-        upgrade_mod_savepoint(true, 2019072112, 'collaborate');
+        upgrade_mod_savepoint(true, 2019072300, 'collaborate');
     }
+
+
 
 
     return true;
