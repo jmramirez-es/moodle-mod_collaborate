@@ -68,7 +68,7 @@ function xmldb_collaborate_upgrade($oldversion) {
        upgrade_mod_savepoint(true, 2019072118, 'collaborate');
     }
 
-    if ($oldversion < 2019072300) {
+    if ($oldversion < 2019072303) {
 
         // Define field grade to be added to collaborate_submissions.
         $table = new xmldb_table('collaborate_submissions');
@@ -80,7 +80,7 @@ function xmldb_collaborate_upgrade($oldversion) {
         }
 
         // Collaborate savepoint reached.
-        upgrade_mod_savepoint(true, 2019072300, 'collaborate');
+        upgrade_mod_savepoint(true, 2019072303, 'collaborate');
     }
 
 
