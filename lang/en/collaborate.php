@@ -77,3 +77,11 @@ $string['submission'] = 'Submission text (part)';
 $string['firstname'] = 'First name';
 $string['lastname'] = 'Last name';
 $string['grade'] = 'Grade';
+
+// Grading form.
+
+$string['allocate_grade'] = 'Allocate a grade';
+$string['gradingheader'] = 'Grade a submission';
+$string['currentgrade'] = 'Current grade: ';
+$string['user'] = 'User: ';
+$string['grade_saved'] = 'Grade saved';
