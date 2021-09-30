@@ -160,4 +160,25 @@ class submissions {
         global $DB;
         $DB->set_field('collaborate_submissions', 'grade', $grade, ['id' => $sid]);
     }
+
+     /**
+     * Get a user grade - required for grading API.
+     * See the lib.php function collaborate_get_user_grades
+     *
+     * @param array $attempts data from the submissions table
+     * @return The maximum grade achieved by this user.
+     */
+    public static function grade_user($attempts) {
+        global $DB;
+        // We could use different strategies here.
+        $maxscore = 0;
+        foreach ($attempts as $attempt) {
+            $grade = $attempt->grade;
+            $maxscore = ($grade > $maxscore) ? $grade : $maxscore;
+        }
+        return $maxscore;
+    }
+
+    
+
 }
