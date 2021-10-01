@@ -590,3 +590,28 @@ function collaborate_extend_settings_navigation(settings_navigation $settingsnav
     $collaboratenode->add(get_string('namechange', 'mod_collaborate'), $namechange_url);
     
 }
+
+/**
+ * A task called from scheduled or adhoc
+ *
+ * @param progress_trace trace object
+ *
+ */
+function collaborate_dotask(progress_trace $trace) {
+    $trace->output('executing dotask');
+}
+
+
+/**
+ * A task called from adhoc
+ *
+ * @param progress_trace trace object
+ * @param $data - form data to update a database record
+ */
+function collaborate_do_adhoc_task(progress_trace $trace, $data) {
+    global $DB;
+    $trace->output('executing dotask');
+    if ($DB->record_exists('collaborate', array('id' => $data->id))) {
+        $DB->update_record('collaborate', $data);
+    }
+}

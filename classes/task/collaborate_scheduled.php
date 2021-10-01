@@ -14,20 +14,31 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
+namespace mod_collaborate\task;
+defined('MOODLE_INTERNAL') || die();
+require_once($CFG->dirroot . '/mod/collaborate/lib.php');
 /**
- * Defines the version and other meta-info about the plugin
+ * A scheduled task.
  *
  * @package    mod_collaborate
- * @copyright  2019 Richard Jones richardnz@outlook.com
+ * @since      Moodle 2.7
+ * @copyright  2015 Flash Gordon http://www.flashgordon.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @see https://github.com/moodlehq/moodle-mod_collaborate
- * @see https://github.com/justinhunt/moodle-mod_collaborate
  */
+class collaborate_scheduled extends \core\task\scheduled_task {
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->component = 'mod_collaborate';
-$plugin->version = 2019072316;
-$plugin->release = 'v1.0'; // Basic activity plugin template.
-$plugin->requires = 2017111301; // Moodle 3.4, 3.5, 3.6, 3.7
-$plugin->maturity = MATURITY_BETA;
+    public function get_name() {
+        // Shown in admin screens
+        return get_string('collaboratetask', 'mod_collaborate');
+   
+}
+     /**
+     *  Run all the tasks
+     */
+     public function execute(){
+            $trace = new \text_progress_trace();
+            collaborate_dotask($trace);
+    }
+}

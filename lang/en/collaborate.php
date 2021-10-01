@@ -90,3 +90,4 @@ $string['grade_saved'] = 'Grade saved';
 $string['namechange'] = 'Change module name';
 $string['action'] = 'Action';
 $string['edit'] = 'Edit';
+$string['collaboratetask'] = 'Collaborate task';
