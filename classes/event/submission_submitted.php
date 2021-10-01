@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the version and other meta-info about the plugin
+ * Class for event to use in collaborate submission
  *
  * @package    mod_collaborate
  * @copyright  2019 Richard Jones richardnz@outlook.com
@@ -24,10 +24,28 @@
  * @see https://github.com/justinhunt/moodle-mod_collaborate
  */
 
+namespace mod_collaborate\event;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_collaborate';
-$plugin->version = 2019072318;
-$plugin->release = 'v1.0'; // Basic activity plugin template.
-$plugin->requires = 2017111301; // Moodle 3.4, 3.5, 3.6, 3.7
-$plugin->maturity = MATURITY_BETA;
+class submission_submitted extends \core\event\base {
+    protected function init() {
+        $this->data['objecttable'] = 'collaborate_submissions';
+        $this->data['crud'] = 'c';
+        $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
+    }
+
+    public static function get_name() {
+        return get_string('submission_submitted', 'mod_collaborate');
+    }
+    /**
+     * Returns non-localised event description with id's for admin use only.
+     *
+     * @return string
+     */
+    public function get_description() {
+        return "The user with id '$this->userid' has
+                made a submission with the id '$this->objectid'
+                in the Collaborate activity with course
+                module id '$this->contextinstanceid'.";
+    }
+}

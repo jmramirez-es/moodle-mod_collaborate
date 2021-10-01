@@ -91,3 +91,5 @@ $string['namechange'] = 'Change module name';
 $string['action'] = 'Action';
 $string['edit'] = 'Edit';
 $string['collaboratetask'] = 'Collaborate task';
+$string['submission_submitted'] = 'Submission submitted';
+$string['submission_graded'] = 'Submission graded';
